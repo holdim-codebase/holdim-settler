@@ -4,8 +4,9 @@ import { logger } from './logging'
 import { repositories } from './repositories'
 import { Proposal } from './services/snapshot'
 import { Proposal as DBProposal } from '@prisma/client'
+import { omit } from 'lodash'
 import crypto from 'crypto'
-import { Message } from '@google-cloud/pubsub'
+import { queueMessage } from './services/pubsub'
 
 export const fastify = fastifyFacotry({ logger })
 
@@ -28,14 +29,14 @@ const processProposal = async (proposal: Proposal) => {
     return
   }
 
-  await repositories.proposal.upsert({
+  return await repositories.proposal.upsert({
     where: { snapshotId: proposal.id },
     create: {
       ...transformProposalToDbFormat(proposal),
       daoId: dao.id,
     },
     update: {
-      ...transformProposalToDbFormat(proposal),
+      ...omit(transformProposalToDbFormat(proposal), ['juniorDescription', 'middleDescription']),
     },
   })
 }
@@ -44,13 +45,20 @@ fastify.post('/', async (request, reply) => {
   const requestId = crypto.randomUUID()
   try {
     logger.info({ message: 'Received request', requestBody: request.body, requestId })
-    const proposals: Proposal[] = JSON.parse(
+    const proposal: Proposal = JSON.parse(
       Buffer.from((request.body as any).message.data, 'base64').toString('utf-8')
     )
-    logger.info({ message: 'Parsed proposals', proposals, requestId })
+    logger.info({ message: 'Parsed proposal', proposal, requestId })
 
-    await Promise.all(proposals.map(proposal => processProposal(proposal)))
+    const dbProposal = await processProposal(proposal)
+    if (!dbProposal) {
+      logger.info({ message: 'Request successfully finished. Proposal was skipped', requestId })
+      return await reply.status(200).send({})
+    }
 
+    logger.info({ message: 'Request successfully saved. Pushing into queue...', requestId })
+    await queueMessage({ id: dbProposal.id.toString(), seniorDescription: dbProposal.seniorDescription  })
+    logger.info({ message: 'Request successfully finished', requestId })
     return await reply.status(200).send({})
   } catch (error: any) {
     logger.error({ message: 'Request failed', err: { message: error.message, stack: error.stack }, requestId })

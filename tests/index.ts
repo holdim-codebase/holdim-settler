@@ -1,5 +1,4 @@
 import { assert } from 'chai'
-import supertest from 'supertest'
 import { repositories } from '../src/repositories'
 import { server as fastify } from '../src/server'
 import { Proposal } from '../src/services/snapshot'

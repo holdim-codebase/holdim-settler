@@ -5,6 +5,6 @@ export const config = {
     },
   },
   pubsub: {
-    topicNameOrId: 'projects/holdim/topics/fetcher-settler',
+    topicNameOrId: 'projects/holdim/topics/settler-ai',
   },
 }
