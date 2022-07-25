@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: '..'
+      dockerfile: 'Dockerfile'
+    networks:
+      - webproxy
+    env_file: .env
+    ports:
+      - '3000:3000'
+  sql:
+    image: 'postgres:14'
+    networks:
+      - webproxy
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+networks:
+  webproxy:
+    driver: bridge

@@ -1,0 +1,42 @@
+{
+  "name": "holdim-settler",
+  "version": "1.0.0",
+  "description": "holdim settler",
+  "main": "dist/index.js",
+  "author": "Zhanybek Sadvakassov",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "lint": "eslint 'src/**/*.ts' -f codeframe"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^3.1.0",
+    "@prisma/client": "^4.1.0",
+    "axios": "^0.27.2",
+    "fastify": "^4.2.1",
+    "lodash": "^4.17.21",
+    "pino": "7.1.0",
+    "prisma": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "5.27.0",
+    "@typescript-eslint/parser": "5.27.0",
+    "chai": "^4.3.6",
+    "eslint": "^7.32.0",
+    "eslint-config-standard-with-typescript": "^21.0.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-sonarjs": "^0.13.0",
+    "mocha": "^10.0.0",
+    "supertest": "^6.2.4",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.6.3"
+  }
+}
