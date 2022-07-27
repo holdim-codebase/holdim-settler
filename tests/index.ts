@@ -37,10 +37,11 @@ describe('Settler', () => {
     await fastify.inject({
       method: 'POST',
       url: '/',
-      payload: createPubSubMessageMock([proposal]),
+      payload: createPubSubMessageMock(proposal),
     })
 
     const proposalAfterUpdate = await repositories.proposal.findUnique({ where: { snapshotId: proposal.id } })
     assert.equal(proposalAfterUpdate?.title, 'Aave V3 Harmony - Freeze Reserves [UPDATED]')
+    await repositories.proposal.update({ where: { snapshotId: proposal.id }, data: { title: 'Aave V3 Harmony - Freeze Reserves' } })
   })
 })

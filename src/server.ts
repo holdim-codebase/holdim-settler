@@ -61,7 +61,7 @@ fastify.post('/', async (request, reply) => {
     logger.info({ message: 'Request successfully finished', requestId })
     return await reply.status(200).send({})
   } catch (error: any) {
-    logger.error({ message: 'Request failed', err: { message: error.message, stack: error.stack }, requestId })
+    logger.error({ message: 'Request failed', err: { message: error?.message, stack: error?.stack }, requestId })
     return reply.status(400).send({ message: (typeof error === 'object' && (error as { message?: string } || null)?.message) ?? 'unknown' })
   }
 })
