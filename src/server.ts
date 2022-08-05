@@ -19,7 +19,7 @@ const transformProposalToDbFormat = (proposal: Proposal): Omit<DBProposal, 'id'|
   startAt: new Date(proposal.start * 1e3),
   endAt: new Date(proposal.end * 1e3),
   author: proposal.author,
-  snapshotLink: proposal.snapshot,
+  snapshotLink: proposal.link,
   discussionLink: proposal. discussion,
 })
 
