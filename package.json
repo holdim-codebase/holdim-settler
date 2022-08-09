@@ -10,7 +10,7 @@
     "test": "mocha -r ts-node/register 'tests/**/*.ts'",
     "build": "tsc",
     "start": "node ./dist/index.js",
-    "lint": "eslint 'src/**/*.ts' -f codeframe"
+    "lint": "eslint './**/*.ts' -f codeframe"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^3.1.0",

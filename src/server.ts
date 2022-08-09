@@ -20,7 +20,7 @@ const transformProposalToDbFormat = (proposal: Proposal): Omit<DBProposal, 'id'|
   endAt: new Date(proposal.end * 1e3),
   author: proposal.author,
   snapshotLink: proposal.link,
-  discussionLink: proposal. discussion,
+  discussionLink: proposal.discussion,
 })
 
 const processProposal = async (proposal: Proposal) => {
@@ -29,7 +29,7 @@ const processProposal = async (proposal: Proposal) => {
     return
   }
 
-  return await repositories.proposal.upsert({
+  return repositories.proposal.upsert({
     where: { snapshotId: proposal.id },
     create: {
       ...transformProposalToDbFormat(proposal),
@@ -57,7 +57,7 @@ fastify.post('/', async (request, reply) => {
     }
 
     logger.info({ message: 'Request successfully saved. Pushing into queue...', requestId })
-    await queueMessage({ id: dbProposal.id.toString(), seniorDescription: dbProposal.seniorDescription  })
+    await queueMessage({ id: dbProposal.id.toString(), seniorDescription: dbProposal.seniorDescription })
     logger.info({ message: 'Request successfully finished', requestId })
     return await reply.status(200).send({})
   } catch (error: any) {
