@@ -57,7 +57,13 @@ fastify.post('/', async (request, reply) => {
     }
 
     logger.info({ message: 'Request successfully saved. Pushing into queue...', requestId })
-    await queueMessage({ id: dbProposal.id.toString(), seniorDescription: dbProposal.seniorDescription })
+    await queueMessage({
+      seniorText: dbProposal.seniorDescription,
+      configName: 'default',
+      metadata: {
+        id: dbProposal.id.toString(),
+      },
+    })
     logger.info({ message: 'Request successfully finished', requestId })
     return await reply.status(200).send({})
   } catch (error: any) {

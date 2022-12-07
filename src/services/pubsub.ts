@@ -2,8 +2,11 @@ import { PubSub } from '@google-cloud/pubsub'
 import { config } from '../config'
 
 interface AIMessage {
-  id: string,
-  seniorDescription: string,
+  seniorText: string
+  configName: string
+  metadata: {
+    id: string
+  }
 }
 
 export const queueMessage = async (message: AIMessage) => {
