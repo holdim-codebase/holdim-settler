@@ -29,6 +29,11 @@ const processProposal = async (proposal: Proposal) => {
     return
   }
 
+  const existingProposal = await repositories.proposal.findUnique({ where: { snapshotId: proposal.id } })
+  if (existingProposal) {
+    return
+  }
+
   return repositories.proposal.upsert({
     where: { snapshotId: proposal.id },
     create: {
